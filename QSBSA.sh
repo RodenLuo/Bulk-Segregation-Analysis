@@ -1,26 +1,3 @@
-#!/bin/bash
-#SBATCH --job-name=QSBSA
-#SBATCH -n 8
-#SBATCH -N 1
-#SBATCH --partition=general
-#SBATCH --qos=general
-#SBATCH --mail-type=END
-#SBATCH --mem=100G
-#SBATCH --mail-user=qiaoshan.lin@uconn.edu
-#SBATCH -o QSBSA_%j.out
-#SBATCH -e QSBSA_%j.err
-
-module load Trimmomatic
-module load bowtie2
-module load samtools
-module load bamtools
-module load bcftools
-module load bedtools
-module load R/3.4.3
-module load blast
-module load minimap2
-module load emboss
-
 ##### Functions
 
 usage()
@@ -179,7 +156,7 @@ else
 	done
 	rm pos.txt
 	#select alignments that have 100% identity, SNP within alignment region; and print the SNP position at transcript to the last column of file
-	/isg/shared/apps/blast/ncbi-blast-2.7.1+/bin/blastn -subject $cod -query flanking.fa -outfmt "6 qseqid qlen qstart qend sseqid slen sstart send pident mismatch length sstrand" | awk '$9>=98{if($2==2001&&$3<=1001&&$4>=1001&&$12~/plus/)print $0"\t"1001-$3+$7;else if($2==2001&&$3<=1001&&$4>=1001&&$12~/minus/)print $0"\t"$7-1001+$3;else if($1~/:1-/&&$3<=($2-1000)&&$4>=($2-1000)&&$12~/plus/)print $0"\t"$2-1000-$3+$7;else if($1~/:1-/&&$3<=($2-1000)&&$4>=($2-1000)&&$12~/minus/)print $0"\t"$7-$2+1000+$3;else if($3<=1001&&$4>=1001&&$12~/plus/)print $0"\t"1001-$3+$7;else if($3<=1001&&$4>=1001&&$12~/minus/)print $0"\t"$7-1001+$3;}' > blast.txt
+	blastn -subject $cod -query flanking.fa -outfmt "6 qseqid qlen qstart qend sseqid slen sstart send pident mismatch length sstrand" | awk '$9>=98{if($2==2001&&$3<=1001&&$4>=1001&&$12~/plus/)print $0"\t"1001-$3+$7;else if($2==2001&&$3<=1001&&$4>=1001&&$12~/minus/)print $0"\t"$7-1001+$3;else if($1~/:1-/&&$3<=($2-1000)&&$4>=($2-1000)&&$12~/plus/)print $0"\t"$2-1000-$3+$7;else if($1~/:1-/&&$3<=($2-1000)&&$4>=($2-1000)&&$12~/minus/)print $0"\t"$7-$2+1000+$3;else if($3<=1001&&$4>=1001&&$12~/plus/)print $0"\t"1001-$3+$7;else if($3<=1001&&$4>=1001&&$12~/minus/)print $0"\t"$7-1001+$3;}' > blast.txt
 	cut -f5 blast.txt |sort|uniq > transcripts.txt
 	perl ~/scripts/fetchSeq4fa2.pl $cod transcripts.txt blast.fa
 	rm transcripts.txt flanking.fa
@@ -217,7 +194,7 @@ else
     	done
     	rm pos.txt
     #select alignments that have 100% identity, SNP within alignment region; and print the SNP position at transcript to the last column of file
-    	/isg/shared/apps/blast/ncbi-blast-2.7.1+/bin/blastn -subject $cod -query flanking.fa -outfmt "6 qseqid qlen qstart qend sseqid slen sstart send pident mismatch length sstrand" | awk '$9>=98{if($2==2001&&$3<=1001&&$4>=1001&&$12~/plus/)print $0"\t"1001-$3+$7;else if($2==2001&&$3<=1001&&$4>=1001&&$12~/minus/)print $0"\t"$7-1001+$3;else if($1~/:1-/&&$3<=($2-1000)&&$4>=($2-1000)&&$12~/plus/)print $0"\t"$2-1000-$3+$7;else if($1~/:1-/&&$3<=($2-1000)&&$4>=($2-1000)&&$12~/minus/)print $0"\t"$7-$2+1000+$3;else if($3<=1001&&$4>=1001&&$12~/plus/)print $0"\t"1001-$3+$7;else if($3<=1001&&$4>=1001&&$12~/minus/)print $0"\t"$7-1001+$3;}' > blast.txt
+    	blastn -subject $cod -query flanking.fa -outfmt "6 qseqid qlen qstart qend sseqid slen sstart send pident mismatch length sstrand" | awk '$9>=98{if($2==2001&&$3<=1001&&$4>=1001&&$12~/plus/)print $0"\t"1001-$3+$7;else if($2==2001&&$3<=1001&&$4>=1001&&$12~/minus/)print $0"\t"$7-1001+$3;else if($1~/:1-/&&$3<=($2-1000)&&$4>=($2-1000)&&$12~/plus/)print $0"\t"$2-1000-$3+$7;else if($1~/:1-/&&$3<=($2-1000)&&$4>=($2-1000)&&$12~/minus/)print $0"\t"$7-$2+1000+$3;else if($3<=1001&&$4>=1001&&$12~/plus/)print $0"\t"1001-$3+$7;else if($3<=1001&&$4>=1001&&$12~/minus/)print $0"\t"$7-1001+$3;}' > blast.txt
     	cut -f5 blast.txt |sort|uniq > transcripts.txt
     	perl ~/scripts/fetchSeq4fa2.pl $cod transcripts.txt blast.fa
     	rm transcripts.txt flanking.fa
