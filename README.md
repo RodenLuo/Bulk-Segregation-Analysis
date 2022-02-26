@@ -1,3 +1,18 @@
+### How to install and use
+
+1. install `conda`
+2. `conda env create -f environment.yml`
+3. `conda activate QSBSA`
+4. Should be able to go and run, but there are the following warnings need to be handeled
+
+
+⚠️ Warning
+
+1. `~/scripts/fetchSeq4fa2.pl` is not included.
+
+2. There are hard coded path that should be changed, such as `home/CAM/`. 
+
+
 ### How to use these scripts?
 
 Step 1: git clone this repository to your directory on server. 
