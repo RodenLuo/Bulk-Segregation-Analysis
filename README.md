@@ -1,7 +1,7 @@
 ### How to install and use
 
 1. install `conda`
-2. `conda env create -f environment.yml`
+2. `conda env create -f env.yml`
 3. `conda activate QSBSA`
 4. Should be able to go and run, but there are the following warnings need to be handeled
 
